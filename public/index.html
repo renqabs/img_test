@@ -423,7 +423,7 @@
         const streamOutput = async userInput => {
             async function connectWebSocket() {
                 return new Promise((resolve, reject) => {
-                    websocket = new WebSocket(`ws://${window.location.host}/ws/`)
+                    websocket = new WebSocket(`wss://${window.location.host}/ws/`)
                     websocket.timeoutInterval = 30000;
                     websocket.onopen = () => {
                         resolve()
