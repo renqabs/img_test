@@ -9,3 +9,4 @@ rich
 aiofiles
 slack_sdk
 emoji
+SydneyGPT
