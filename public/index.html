@@ -438,6 +438,7 @@
             await connectWebSocket()
 
             let currentPreviousMessages
+            let oldSuggestions = null
             setPreviousMessages(previousMessages => currentPreviousMessages = previousMessages)
 
             websocket.send(JSON.stringify({
@@ -451,11 +452,11 @@
             return new Promise((resolve, reject) => {
                 function finished(result) {
                     websocket.close()
-		    oldSuggestions = null
+                oldSuggestions = null
                     resolve(result)
                 }
                 const oldReject = reject
-		let oldSuggestions = null
+
                 reject = function() {
                     websocket.close()
                     oldReject.apply(this, arguments)
@@ -493,9 +494,9 @@
                                     updateMessage({revoked: true})
                                     finished({revoked: true})
                                 } else {
-				    if (oldSuggestions === null){
-					    oldSuggestions = acceptSuggestions ? message.suggestedResponses?.map(res => res.text) : []
-				    }
+                    if (oldSuggestions === null){
+                        oldSuggestions = acceptSuggestions ? message.suggestedResponses?.map(res => res.text) : []
+                    }
                                     updateMessage({
                                         text: message.adaptiveCards[0].body[0].text,
                                         hiddenText: message.text !== message.adaptiveCards[0].body[0].text ? message.text : null,
@@ -516,7 +517,7 @@
                             });
                             updateMessage({
                                 text: align_image_text,
-				hiddenText: message.text !== message.adaptiveCards[0].body[0].text ? message.text : null,
+                                hiddenText: message.text !== message.adaptiveCards[0].body[0].text ? message.text : null,
                                 suggestions: oldSuggestions
                             })
                           }
