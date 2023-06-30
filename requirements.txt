@@ -9,4 +9,3 @@ aiofiles
 slack_sdk
 emoji
 SydneyGPT
-EdgeGPT
