@@ -1,5 +1,4 @@
 aiohttp
-EdgeGPT
 BingImageCreator
 certifi
 httpx
@@ -10,3 +9,4 @@ aiofiles
 slack_sdk
 emoji
 SydneyGPT
+EdgeGPT
