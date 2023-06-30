@@ -514,6 +514,8 @@
                             });
                             updateMessage({
                                 text: align_image_text,
+				hiddenText: message.text !== message.adaptiveCards[0].body[0].text ? message.text : null,
+                                suggestions: acceptSuggestions ? message.suggestedResponses?.map(res => res.text) : []
                             })
                           }
                         }
