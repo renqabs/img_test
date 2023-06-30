@@ -494,9 +494,9 @@
                                     updateMessage({revoked: true})
                                     finished({revoked: true})
                                 } else {
-                    if (oldSuggestions === null){
-                        oldSuggestions = acceptSuggestions ? message.suggestedResponses?.map(res => res.text) : []
-                    }
+                                    if (oldSuggestions == null){
+                                      oldSuggestions = acceptSuggestions ? message.suggestedResponses?.map(res => res.text) : []
+                                    }
                                     updateMessage({
                                         text: message.adaptiveCards[0].body[0].text,
                                         hiddenText: message.text !== message.adaptiveCards[0].body[0].text ? message.text : null,
