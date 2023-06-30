@@ -451,12 +451,11 @@
             return new Promise((resolve, reject) => {
                 function finished(result) {
                     websocket.close()
+		    oldSuggestions = null
                     resolve(result)
                 }
-                function sleep(ms) {
-                    return new Promise (resolve => setTimeout (resolve, ms));
-                }
                 const oldReject = reject
+		let oldSuggestions = null
                 reject = function() {
                     websocket.close()
                     oldReject.apply(this, arguments)
@@ -494,10 +493,13 @@
                                     updateMessage({revoked: true})
                                     finished({revoked: true})
                                 } else {
+				    if (oldSuggestions === null){
+					    oldSuggestions = acceptSuggestions ? message.suggestedResponses?.map(res => res.text) : []
+				    }
                                     updateMessage({
                                         text: message.adaptiveCards[0].body[0].text,
                                         hiddenText: message.text !== message.adaptiveCards[0].body[0].text ? message.text : null,
-                                        suggestions: acceptSuggestions ? message.suggestedResponses?.map(res => res.text) : []
+                                        suggestions: oldSuggestions
                                     })
                                 }
                                 break
@@ -515,7 +517,7 @@
                             updateMessage({
                                 text: align_image_text,
 				hiddenText: message.text !== message.adaptiveCards[0].body[0].text ? message.text : null,
-                                suggestions: acceptSuggestions ? message.suggestedResponses?.map(res => res.text) : []
+                                suggestions: oldSuggestions
                             })
                           }
                         }
