@@ -152,12 +152,20 @@ class ChatHub:
                                 )
                                 == "GenerateContentQuery"
                             ):
-                                async with ImageGenAsync(
-                                    all_cookies=self.cookies
-                                ) as image_generator:
-                                    images = await image_generator.get_images(
-                                        response["arguments"][0]["messages"][0]["text"],
-                                    )
+                                if len(self.cookies) == 0:
+                                    async with ImageGenAsync(
+                                        auth_cookie=os.environ.get('image_gen_cookie')
+                                    ) as image_generator:
+                                        images = await image_generator.get_images(
+                                           response["arguments"][0]["messages"][0]["text"],
+                                        )
+                                else:
+                                    async with ImageGenAsync(
+                                        all_cookies=self.cookies
+                                    ) as image_generator:
+                                        images = await image_generator.get_images(
+                                           response["arguments"][0]["messages"][0]["text"],
+                                        )
                                 for i, image in enumerate(images):
                                     resp_txt = f"{resp_txt}\n![image{i}]({image})"
                                 draw = True
