@@ -8,5 +8,5 @@ rich
 aiofiles
 slack_sdk
 emoji
-EdgeGPT==0.11.6
 SydneyGPT
+EdgeGPT==0.11.8
