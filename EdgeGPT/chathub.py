@@ -206,12 +206,14 @@ class ChatHub:
                                 f"{response['item']['result']['value']}: {response['item']['result']['message']}",
                             )
                         if draw:
-                            cache = response["item"]["messages"][1]["adaptiveCards"][0][
-                                "body"
-                            ][0]["text"]
-                            response["item"]["messages"][1]["adaptiveCards"][0]["body"][
-                                0
-                            ]["text"] = (cache + resp_txt)
+                            id = 1
+                            for i in range(1, len(response["item"]["messages"])):
+                                if "adaptiveCards" in response["item"]["messages"][i]:
+                                    if "text" in response["item"]["messages"][i]["adaptiveCards"][0]["body"][0]:
+                                        id = i
+                                        break
+                            cache=response["item"]["messages"][id]["adaptiveCards"][0]["body"][0]["text"]
+                            response["item"]["messages"][id]["adaptiveCards"][0]["body"][0]["text"] = (cache + resp_txt)
                         if (
                             response["item"]["messages"][-1]["contentOrigin"]
                             == "Apology"
