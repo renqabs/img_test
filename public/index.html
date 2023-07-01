@@ -507,31 +507,39 @@
                         }
                     } else if (response.type === 2) {
                         // Image Generate support
-                        if (response.item.messages.length === 3){
-                        const message = response.item.messages[response.item.messages.length - 2]
-                        if ("adaptiveCards" in message) {
-                            if (message.adaptiveCards[0].body[0].text.indexOf("[image") !== -1){
+                        let message_img = null
+                        let message_all = response.item.messages.slice(1)
+                        for (let message_key in message_all){
+                            if ("adaptiveCards" in message_all[message_key]){
+                                    if ("text" in message_all[message_key].adaptiveCards[0].body[0]){
+                                        if (message_all[message_key].adaptiveCards[0].body[0].text.indexOf("[image") !== -1)
+                                            message_img = message_all[message_key]
+                                            break
+                                    }
+                            }
+                        }
+                        if (message_img !== null) {
                             let regex = /!\[image\d\]\(.*?\)\n!\[image\d\]\(.*?\)/g;
-                            const align_image_text = message.adaptiveCards[0].body[0].text.replace(regex, function(match) {
+                            const align_image_text = message_img.adaptiveCards[0].body[0].text.replace(regex, function(match) {
                               return match.replace(/\n/, "");
                             });
                             updateMessage({
                                 text: align_image_text,
-                                hiddenText: message.text !== message.adaptiveCards[0].body[0].text ? message.text : null,
+                                hiddenText: message_img.text !== message_img.adaptiveCards[0].body[0].text ? message_img.text : null,
                                 suggestions: oldSuggestions
                             })
-                          }
                         }
-                    }
                     finished()
 
                     } else if (response.type === "error") {
                         if (response.error.indexOf("Sorry, you need to login first to access this service") !== -1 || 
                             response.error.indexOf("Cannot retrieve user status") !== -1 ||
                             response.error.indexOf("ServiceClient failure") !== -1 ||
-                            response.error.indexOf("conversationSignature") !== -1 ||
-                            response.error.indexOf("no close frame received") !== -1){
+                            response.error.indexOf("conversationSignature") !== -1){
                             finished({revoked_auth: true})
+                        }
+                        else if(response.error.indexOf("no close frame received") !== -1){
+                            finished({revoked: true})
                         }
                         else{ 
                             reject(response.error)
