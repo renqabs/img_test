@@ -1,7 +1,7 @@
 from enum import Enum
 
 try:
-    from typing import Literal, Union
+    from typing import Union, Literal
 except ImportError:
     from typing_extensions import Literal
 from typing import Optional
