@@ -6,11 +6,14 @@ import traceback
 import urllib.request
 import emoji
 import claude
+import sys, os
+sys.path.insert(0, os.path.dirname(__file__))
+
+public_dir = '/public'
 
 from SydneyGPT.SydneyGPT import Chatbot
 from aiohttp import web
 
-public_dir = '/public'
 
 
 async def sydney_process_message(user_message, context, _U, locale):
