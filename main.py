@@ -1,7 +1,6 @@
 import argparse
 import asyncio
 import json
-import os
 import traceback
 import urllib.request
 import emoji
@@ -15,16 +14,14 @@ from SydneyGPT.SydneyGPT import Chatbot
 from aiohttp import web
 
 
-
-async def sydney_process_message(user_message, context, _U, locale):
+async def sydney_process_message(user_message, context, _U, locale, imageInput):
     chatbot = None
     try:
         if _U:
-            #cookies = loaded_cookies + [{"name": "_U", "value": _U}]
             os.environ['image_gen_cookie'] = _U
         #else:
         cookies = loaded_cookies
-        chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy)
+        chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
         async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative",raw=True,
                                                     webpage_context=context, search_result=True, locale=locale):
             yield response
@@ -75,9 +72,13 @@ async def websocket_handler(request):
                 context = request['context']
                 locale = request['locale']
                 _U = request.get('_U')
+                if len(request.get('imageInput')) > 0:
+                    imageInput = request.get('imageInput').split(",")[1]
+                else:
+                    imageInput = None
                 bot_type = request.get("botType", "Sydney")
                 if bot_type == "Sydney":
-                    async for response in sydney_process_message(user_message, context, _U, locale=locale):
+                    async for response in sydney_process_message(user_message, context, _U, locale=locale, imageInput=imageInput):
                         await ws.send_json(response)
                 elif bot_type == "Claude":
                     async for response in claude_process_message(context):
