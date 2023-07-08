@@ -223,7 +223,7 @@
                         </label>
                         <br/>
                         {
-                            ['[assistant](#search_query)', '[assistant](#message)'].includes(data.tag) &&
+                            ['[assistant](#search_query)', '[assistant](#message)', '[assistant](#Analyze_image_query)'].includes(data.tag) &&
                             <label>
                                 HiddenText:
                                 <textarea className="large-textarea" name="hiddenText" value={data.hiddenText || ''}
@@ -516,6 +516,13 @@
                             case 'InternalSearchQuery':
                                 appendMessage({
                                     tag: '[assistant](#search_query)',
+                                    text: message.text,
+                                    hiddenText: message.hiddenText
+                                })
+                                break
+                            case 'InternalLoaderMessage':
+                                appendMessage({
+                                    tag: '[assistant](#Analyze_image_query)',
                                     text: message.text,
                                     hiddenText: message.hiddenText
                                 })
