@@ -22,8 +22,6 @@ class ConversationStyle(Enum):
         "enuaug",
         "dagslnv1nr",
         "dv3sugg",
-        "recdxgnd",
-        "eredirecturl",
         "iyoloxap",
         "iyoloneutral",
         "h3imaginative",
