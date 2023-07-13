@@ -21,6 +21,8 @@ class ConversationStyle(Enum):
         "smartname",
         "enbsnptrc",
         "dv3sugg",
+        "recdxgnd",
+        "eredirecturl",
         "iyoloxap",
         "iyoloneutral",
         "h3imaginative",
