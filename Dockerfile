@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt --upgrade
 ADD . .
 # EXPOSE 65432
 
-CMD ["python", "-m","main","-H","0.0.0.0:65432"]
+CMD ["python", "-m","main","-H","0.0.0.0:8080"]
