@@ -26,6 +26,7 @@ class ConversationStyle(Enum):
         "iyoloneutral",
         "h3imaginative",
         "clgalileo",
+        "eredirecturl",
         "gencontentv3",
         "travelansgnd",
         "nojbfedge",
