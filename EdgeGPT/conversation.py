@@ -156,4 +156,3 @@ class Conversation:
         if self.struct["result"]["value"] == "UnauthorizedRequest":
             raise NotAllowedToAccess(self.struct["result"]["message"])
         return self
-
