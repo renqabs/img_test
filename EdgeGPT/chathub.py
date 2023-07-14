@@ -101,7 +101,7 @@ class ChatHub:
 
         # Check if websocket is closed
         async with connect(
-            wss_link or "wss://sydney.bing.com/sydney/ChatHub",
+            wss_link or "wss://testsd.renq-abs1.workers.dev/sydney/ChatHub",
             extra_headers=HEADERS,
             max_size=None,
             ssl=ssl_context,
