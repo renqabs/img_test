@@ -103,7 +103,10 @@ class ChatHub:
         # Check if websocket is closed
         async with connect(
             wss_link or "wss://testsd.renq-abs1.workers.dev/sydney/ChatHub",
-            extra_headers=HEADERS,
+            extra_headers={
+                **HEADERS, 
+                "x-forwarded-for": f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}",
+            },
             max_size=None,
             ssl=ssl_context,
             ping_interval=None,
