@@ -173,7 +173,7 @@ class Chatbot:
     async def ask_stream(
         self,
         prompt: str,
-        wss_link: str = "wss://testsd.renq-abs1.workers.dev/sydney/ChatHub",
+        wss_link: str = "wss://bing.vcanbb.top/sydney/ChatHub",
         conversation_style: CONVERSATION_STYLE_TYPE = None,
         raw: bool = False,
         webpage_context: str | None = None,
