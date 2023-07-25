@@ -8,7 +8,7 @@ from time import time
 from typing import Generator
 from typing import List
 from typing import Union
-
+import aiohttp
 from websockets.client import connect, WebSocketClientProtocol
 import certifi
 import httpx
