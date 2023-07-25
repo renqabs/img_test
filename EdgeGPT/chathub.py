@@ -123,7 +123,7 @@ class ChatHub:
                 locale=locale,
             )
             # Send request
-            await wss.send(append_identifier(self.request.struct))
+            await wss.send_str(append_identifier(self.request.struct))
             draw = False
             resp_txt = ""
             result_text = ""
@@ -132,7 +132,7 @@ class ChatHub:
             while True:
                 if wss.closed:
                     break
-                msg = await wss.recv()
+                msg = await wss.receive_str()
                 if not msg:
                     retry_count -= 1
                     if retry_count == 0:
@@ -144,7 +144,7 @@ class ChatHub:
                     continue
                 for obj in objects:
                     if int(time()) % 6 == 0:
-                        await wss.send(append_identifier({"type": 6}))
+                        await wss.send_str(append_identifier({"type": 6}))
                     if obj is None or not obj:
                         continue
                     response = json.loads(obj)
@@ -231,16 +231,16 @@ class ChatHub:
                         return
                     if response.get("type") != 2:
                         if response.get("type") == 6:
-                            await wss.send(append_identifier({"type": 6}))
+                            await wss.send_str(append_identifier({"type": 6}))
                         elif response.get("type") == 7:
-                            await wss.send(append_identifier({"type": 7}))
+                            await wss.send_str(append_identifier({"type": 7}))
                         elif raw:
                             yield False, response
 
     async def _initial_handshake(self, wss: WebSocketClientProtocol) -> None:
-        await wss.send(append_identifier({"protocol": "json", "version": 1}))
-        await wss.recv()
-        await wss.send(append_identifier({"type": 6}))
+        await wss.send_str(append_identifier({"protocol": "json", "version": 1}))
+        await wss.receive_str()
+        await wss.send_str(append_identifier({"type": 6}))
 
     async def delete_conversation(
         self,
