@@ -23,7 +23,6 @@ from .request import ChatHubRequest
 from .utilities import append_identifier
 from .utilities import get_ran_hex
 from .utilities import guess_locale
-
 ssl_context = ssl.create_default_context()
 ssl_context.load_verify_locations(certifi.where())
 
@@ -61,7 +60,11 @@ class ChatHub:
             timeout=900,
             headers=HEADERS_INIT_CONVER,
         )
-
+        cookies = {}
+        if self.cookies is not None:
+            for cookie in self.cookies:
+                cookies[cookie["name"]] = cookie["value"]
+        self.aio_session = aiohttp.ClientSession(cookies=cookies)
     async def get_conversation(
         self,
         conversation_id: str = None,
@@ -110,15 +113,14 @@ class ChatHub:
             })
 
         # Check if websocket is closed
-        async with connect(
+        async with self.aio_session.connect(
             wss_link or "wss://sydney.bing.com/sydney/ChatHub",
             extra_headers={
                 **req_header, 
                 "x-forwarded-for": f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(1, 255)}",
             },
-            max_size=None,
             ssl=ssl_context,
-            ping_interval=None,
+            proxy=self.proxy,
         ) as wss:
             await self._initial_handshake(wss)
             # Construct a ChatHub request
@@ -274,3 +276,4 @@ class ChatHub:
 
     async def close(self) -> None:
         await self.session.aclose()
+        await self.aio_session.close()
