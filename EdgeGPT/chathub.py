@@ -113,7 +113,7 @@ class ChatHub:
             })
 
         # Check if websocket is closed
-        async with self.aio_session.connect(
+        async with self.aio_session.ws_connect(
             wss_link or "wss://sydney.bing.com/sydney/ChatHub",
             extra_headers={
                 **req_header, 
