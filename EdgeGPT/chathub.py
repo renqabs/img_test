@@ -132,14 +132,14 @@ class ChatHub:
             while True:
                 if wss.closed:
                     break
-                msg = await wss.receive_str()
-                if not msg:
+                msg = await wss.receive(timeout=900)
+                if not msg.data:
                     retry_count -= 1
                     if retry_count == 0:
                         raise Exception("No response from server")
                     continue
-                if isinstance(msg, str):
-                    objects = msg.split(DELIMITER)
+                if isinstance(msg.data, str):
+                    objects = msg.data.split(DELIMITER)
                 else:
                     continue
                 for obj in objects:
