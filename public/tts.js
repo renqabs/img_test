@@ -29,7 +29,7 @@ export class TTS {
     }
     const lines = text.split('\n');
     const filteredLines = lines.filter(line => !line.includes(']: http'));
-    const cleanedText = filteredLines.join('\n').replace(/\[\^\d+\^\]/g, '').replace(/\[\d+\]/g, '');
+    const cleanedText = filteredLines.join('\n').replace(/\[\^\d+\^\]/g, '').replace(/\[\d+\]/g, '').replace(/\n!\[image\d\]\(.*?\)/g, '');
     this.currentText = cleanedText.replace(/[^\u4e00-\u9fa5_a-zA-Z0-9，。？,：.,:\n]+/g, '')
     this.finished = false;
     this.loop();
