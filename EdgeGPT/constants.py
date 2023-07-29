@@ -47,6 +47,9 @@ HEADERS_INIT_CONVER = {
     "upgrade-insecure-requests": "1",
     "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.46",
     "x-edge-shopping-flag": "1",
+    "x-ms-client-request-id": str(uuid.uuid4()),
+    "x-ms-useragent": "azsdk-js-api-client-factory/1.0.0-beta.1 core-rest-pipeline/1.10.0 OS/Win32",
+    "Referer": "https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx",
     "x-forwarded-for": FORWARDED_IP,
 }
 
