@@ -22,44 +22,20 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
         #else:
         cookies = [
             {
-                "name": "ABDEF",
-                "value": "V=13&ABDV=11&MRB=1685432152020&MRNB=0"
-            },
-            {
                 "name": "BingAI_Rand_IP",
                 "value": "15.153.142.35"
-            },
-            {
-                "name": "_clck",
-                "value": "kspbl9|2|fc0|0|1244"
             },
             {
                 "name": "_U",
                 "value": "qrtewrytigiooupipp"
             },
             {
-                "name": "_ga_MM5J5X8QQC",
-                "value": "GS1.1.1685083384.1.0.1685083391.0.0.0"
-            },
-            {
-                "name": "SRCHUSR",
-                "value": "T=1684977659000"
-            },
-            {
-                "name": "KievRPSSecAuth",
-                "value": "asfdgfhgfjhllghhjkljlj"
-            },
-            {
-                "name": "_ga",
-                "value": "GA1.1.1804665542.1685083384"
+                "name": "Hm_lvt_299c614daa53fbcede70f2d22df0a31b",
+                "value": "1691248615"
             },
             {
                 "name": "SRCHHPGUSR",
-                "value": "cdxtone=Creative&cdxtoneopts=h3imaginative,clgalileo,gencontentv3,fluxsrtrunc,fluxtrunc,fluxv1,fluxv1short,rai278,replaceurl&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=1.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796&HV=1690452958"
-            },
-            {
-                "name": "_RwBf",
-                "value": "qwertyuiuiiopopojkllk"
+                "value": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1204&SCH=316&DPR=2.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796"
             }
         ] 
         chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
