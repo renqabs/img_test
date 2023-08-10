@@ -152,6 +152,7 @@ class Conversation:
 
         try:
             self.struct = response.json()
+            print(self.struct)
         except (json.decoder.JSONDecodeError, NotAllowedToAccess) as exc:
             #print(response.text)
             raise Exception(
