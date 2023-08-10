@@ -56,6 +56,10 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
             {
                 "name": "SRCHHPGUSR",
                 "value": "cdxtone=Creative&cdxtoneopts=h3imaginative,clgalileo,gencontentv3,fluxsrtrunc,fluxtrunc,fluxv1,fluxv1short,rai278,replaceurl&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=1.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796&HV=1690452958"
+            },
+            {
+                "name": "_RwBf",
+                "value": "qwertyuiuiiopopojkllk"
             }
         ] 
         chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
