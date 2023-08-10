@@ -1,13 +1,7 @@
 import random
 import uuid
-import socket
 
 DELIMITER = "\x1e"
-
-take_ip_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-take_ip_socket.connect(("8.8.8.8", 80))
-FORWARDED_IP: str = take_ip_socket.getsockname()[0]
-take_ip_socket.close()
 # Generate random IP between range 13.104.0.0/14
 # FORWARDED_IP = f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
