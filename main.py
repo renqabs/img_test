@@ -22,16 +22,8 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
         #else:
         cookies = [
             {
-                "name": "BingAI_Rand_IP",
-                "value": "15.153.142.35"
-            },
-            {
                 "name": "_U",
                 "value": "qrtewrytigiooupipp"
-            },
-            {
-                "name": "Hm_lvt_299c614daa53fbcede70f2d22df0a31b",
-                "value": "1691248615"
             },
             {
                 "name": "SRCHHPGUSR",
