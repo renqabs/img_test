@@ -20,7 +20,7 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
         if _U:
             os.environ['image_gen_cookie'] = _U
         #else:
-        cookies = [{"name": "_U", "value": "qeretttskjllgjgznWRddcDFKFKFFwewrrtreyrurtu"},{"name":"KievRPSSecAuth","value":"qwrewhjhfjkhlljQERljafsgfhdfjjg"}]
+        cookies = [{"name": "_U", "value": "qeretttskjllgjgznWRddcDFKFKFFwewrrtreyrurtu"},{"name":"KievRPSSecAuth","value":"qwrewhjhfjkhlljQERljafsgfhdfjjg"},{"name":"SRCHHPGUSR","value":"cdxtone=Creative&cdxtoneopts=h3imaginative,clgalileo,gencontentv3,fluxsrtrunc,fluxtrunc,fluxv1,fluxv1short,rai278,replaceurl&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=1.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796&HV=1690452958"}]
         chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
         async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative",raw=True,
                                                     webpage_context=context, search_result=True, locale=locale):
