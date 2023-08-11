@@ -12,13 +12,13 @@ HEADERS = {
     "accept-encoding": "gzip, deflate, br",
     "content-type": "text/stream; charset=UTF-8",
     "cache-control": "no-cache",
-    "Pragma": "no-cache",
+    "pragma": "no-cache",
     "x-forwarded-for": FORWARDED_IP,
 }
 
 HEADERS_INIT_CONVER = {
-    "accept": "application/json",
-    "accept-encoding": "gzip, deflate, br, zsdch",
+    "accept": "*/*",
+    "accept-encoding": "gzip, deflate, br",
     "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
     "sec-ch-ua": '"Chromium";v="116", "Not)A;Brand";v="24", "Microsoft Edge";v="116"',
     "sec-ch-ua-arch": '"x86"',
@@ -30,8 +30,8 @@ HEADERS_INIT_CONVER = {
     "sec-ch-ua-platform": '"Windows"',
     "sec-ch-ua-platform-version": '"15.0.0"',
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.0.0",
-    "X-Ms-Useragent": 'azsdk-js-api-client-factory/1.0.0-beta.1 core-rest-pipeline/1.10.3 OS/Windows',
     "x-forwarded-for": FORWARDED_IP,
+    "referrer-policy": "origin-when-cross-origin",
 }
 
 HEADER_IMG_UPLOAD = {
