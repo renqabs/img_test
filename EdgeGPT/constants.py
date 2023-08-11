@@ -14,6 +14,7 @@ HEADERS = {
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "x-forwarded-for": FORWARDED_IP,
+    'referer': 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx',
 }
 
 HEADERS_INIT_CONVER = {
@@ -32,6 +33,7 @@ HEADERS_INIT_CONVER = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.0.0",
     "x-forwarded-for": FORWARDED_IP,
     "referrer-policy": "origin-when-cross-origin",
+    'referer': 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx',
 }
 
 HEADER_IMG_UPLOAD = {
