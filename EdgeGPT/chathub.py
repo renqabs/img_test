@@ -109,6 +109,10 @@ class ChatHub:
         wss = await self.aio_session.ws_connect(
             wss_link or "wss://sydney.bing.com/sydney/ChatHub",
             ssl=ssl_context,
+            headers={
+                **req_header, 
+                "x-forwarded-for": f"11.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(1, 255)}",
+            },
             proxy=self.proxy,
         )
         await self._initial_handshake(wss)
@@ -156,7 +160,7 @@ class ChatHub:
                             == "GenerateContentQuery"
                         ):
                             async with ImageGenAsync(
-                                auth_cookie=os.environ.get('image_gen_cookie')
+                                all_cookies=self.cookies
                             ) as image_generator:
                                 images = await image_generator.get_images(
                                     response["arguments"][0]["messages"][0]["text"],
