@@ -29,7 +29,7 @@ class ConversationStyle(Enum):
         "iyoloexp",
         "udt4upm5gnd",
         "eredirecturl",
-        "nojbfedge"
+        "nojbfedge",
     ]
     balanced = [
         "nlu_direct_response_filter",
