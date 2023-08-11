@@ -28,6 +28,13 @@ HEADERS_INIT_CONVER = {
     "sec-ch-ua-platform": '"Windows"',
     "sec-ch-ua-platform-version": '"15.0.0"',
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.0.0",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "sec-ms-gec-version": "1-115.0.1901.188",
+    "x-ms-client-request-id": str(uuid.uuid4()),
+    "x-ms-useragent": "azsdk-js-api-client-factory/1.0.0-beta.1 core-rest-pipeline/1.10.3 OS/Windows",
+    "Referer": "https://www.bing.com/search?",
     "x-forwarded-for": FORWARDED_IP,
 }
 
