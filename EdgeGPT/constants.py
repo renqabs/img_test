@@ -47,6 +47,7 @@ HEADERS_INIT_CONVER = {
     "sec-ch-ua-platform-version": '"15.0.0"',
     "upgrade-insecure-requests": "1",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188",
+    "x-ms-useragent": "azsdk-js-api-client-factory/1.0.0-beta.1 core-rest-pipeline/1.10.3 OS/Windows",
     "x-edge-shopping-flag": "1",
     "x-forwarded-for": FORWARDED_IP,
 }
