@@ -3,7 +3,7 @@ import uuid
 
 DELIMITER = "\x1e"
 # Generate random IP between range 13.104.0.0/14
-# FORWARDED_IP = f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
+FORWARDED_IP = f"11.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
 HEADERS = {
     "accept": "application/json",
@@ -28,6 +28,7 @@ HEADERS = {
     "x-ms-useragent": "azsdk-js-api-client-factory/1.0.0-beta.1 core-rest-pipeline/1.10.3 OS/Windows",
     "Referer": "https://www.bing.com/search?",
     "Referrer-Policy": "origin-when-cross-origin",
+    "x-forwarded-for": FORWARDED_IP,
 }
 
 HEADERS_INIT_CONVER = {
@@ -47,6 +48,7 @@ HEADERS_INIT_CONVER = {
     "upgrade-insecure-requests": "1",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188",
     "x-edge-shopping-flag": "1",
+    "x-forwarded-for": FORWARDED_IP,
 }
 
 HEADER_IMG_UPLOAD = {
