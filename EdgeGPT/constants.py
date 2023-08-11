@@ -5,7 +5,7 @@ DELIMITER = "\x1e"
 
 
 # Generate random IP between range 13.104.0.0/14
-FORWARDED_IP = f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
+FORWARDED_IP = f"11.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
 HEADERS = {
     "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
