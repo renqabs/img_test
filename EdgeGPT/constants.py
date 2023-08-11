@@ -8,13 +8,12 @@ DELIMITER = "\x1e"
 FORWARDED_IP = f"11.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
 HEADERS = {
-    "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
-    "accept-encoding": "gzip, deflate, br",
-    "content-type": "text/stream; charset=UTF-8",
+    "accept-language": "en-US;q=0.9",
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "x-forwarded-for": FORWARDED_IP,
-    'referer': 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx',
+    "Referer": "https://www.bing.com/search?",
+    "Referrer-Policy": "origin-when-cross-origin",
 }
 
 HEADERS_INIT_CONVER = {
