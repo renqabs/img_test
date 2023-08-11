@@ -105,10 +105,6 @@ class Conversation:
         async with httpx.AsyncClient(
             proxies=proxy,
             timeout=30,
-            headers={
-                **HEADERS_INIT_CONVER,
-                "x-forwarded-for": f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
-                    },
             transport=transport,
             cookies=formatted_cookies,
         ) as client:
