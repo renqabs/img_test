@@ -12,8 +12,7 @@ HEADERS = {
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "x-forwarded-for": FORWARDED_IP,
-    "Referer": "https://www.bing.com/search?",
-    "Referrer-Policy": "origin-when-cross-origin",
+    "origin": "https://www.bing.com",
 }
 
 HEADERS_INIT_CONVER = {
