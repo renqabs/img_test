@@ -20,7 +20,6 @@ HEADERS_INIT_CONVER = {
     "accept": "application/json",
     "accept-encoding": "gzip, deflate, br, zsdch",
     "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
-    "cache-control": "max-age=0",
     "sec-ch-ua": '"Chromium";v="116", "Not)A;Brand";v="24", "Microsoft Edge";v="116"',
     "sec-ch-ua-arch": '"x86"',
     "sec-ch-ua-bitness": '"64"',
