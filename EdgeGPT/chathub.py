@@ -109,7 +109,10 @@ class ChatHub:
         wss = await self.aio_session.ws_connect(
             wss_link or "wss://sydney.bing.com/sydney/ChatHub",
             ssl=ssl_context,
-            headers=HEADERS,
+            headers={
+                **HEADERS_INIT_CONVER,
+                "x-forwarded-for": f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
+                    },
             proxy=self.proxy,
         )
         await self._initial_handshake(wss)
