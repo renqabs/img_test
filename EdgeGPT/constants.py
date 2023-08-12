@@ -9,6 +9,7 @@ FORWARDED_IP = f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.
 
 HEADERS = {
     "accept-language": "en-US;q=0.9",
+    "accept-encoding": "gzip, deflate, br",
     "cache-control": "no-cache",
     "pragma": "no-cache",
     "x-forwarded-for": FORWARDED_IP,
