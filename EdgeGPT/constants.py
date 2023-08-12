@@ -13,7 +13,7 @@ HEADERS = {
     "pragma": "no-cache",
     "x-forwarded-for": FORWARDED_IP,
     "origin": "https://www.bing.com",
-    "referer": "https://www.bing.com/search?",
+    "referer": "https://www.bing.com/search?q=Bing+AI",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.0.0",
 }
 
@@ -35,12 +35,12 @@ HEADERS_INIT_CONVER = {
     "sec-fetch-site": "same-origin",
     "x-ms-client-request-id": str(uuid.uuid4()),
     "x-ms-useragent": "azsdk-js-api-client-factory/1.0.0-beta.1 core-rest-pipeline/1.10.3 OS/Windows",
-    "referer": "https://www.bing.com/search?",
+    "referer": "https://www.bing.com/search?q=Bing+AI",
     "x-forwarded-for": FORWARDED_IP,
 }
 
 
 
 HEADER_IMG_UPLOAD = {
-    'referer': 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx',
+    'referer': 'https://www.bing.com/search?q=Bing+AI',
 }
