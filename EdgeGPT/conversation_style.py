@@ -15,7 +15,6 @@ class ConversationStyle(Enum):
         "responsible_ai_policy_235",
         "enablemm",
         "dv3sugg",
-        "autosave",
         "iyxapbing",
         "iycapbing",
         "h3imaginative",
