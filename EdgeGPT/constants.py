@@ -8,7 +8,7 @@ DELIMITER = "\x1e"
 FORWARDED_IP = f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
 HEADERS = {
-    "accept-language": "en-US;q=0.9",
+    "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
     "accept-encoding": "gzip, deflate, br",
     "cache-control": "no-cache",
     "pragma": "no-cache",
