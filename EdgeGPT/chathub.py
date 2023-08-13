@@ -104,13 +104,12 @@ class ChatHub:
             for cookie in self.cookies:
                 cookies[cookie["name"]] = cookie["value"]
         self.aio_session = aiohttp.ClientSession(cookies=cookies)
-        req_header = HEADERS
         # Check if websocket is closed
         wss = await self.aio_session.ws_connect(
             wss_link or "wss://sydney.bing.com/sydney/ChatHub",
             ssl=ssl_context,
             headers={
-                **HEADERS_INIT_CONVER,
+                **HEADERS,
                 "x-forwarded-for": f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
                     },
             proxy=self.proxy,
