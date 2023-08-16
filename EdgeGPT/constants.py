@@ -43,16 +43,10 @@ HEADERS_INIT_CONVER = {
 
 
 HEADER_IMG_UPLOAD = {
-    "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
-    "accept-encoding": "gzip, deflate, br",
-    "sec-ch-ua": '"Not)A;Brand";v="24", "Microsoft Edge";v="116", "Chromium";v="116",',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"Windows"',
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.0.0",
-    "origin": "https://www.bing.com",
     'referer': 'https://www.bing.com/search?q=Bing+AI',
     "x-forwarded-for": FORWARDED_IP,
 }
