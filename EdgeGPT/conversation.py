@@ -5,7 +5,7 @@ from typing import Union
 from .constants import HEADER_IMG_UPLOAD
 import httpx
 import random
-
+from .ip_rand import get_random_ip
 from .constants import HEADERS_INIT_CONVER
 from .exceptions import NotAllowedToAccess
 
@@ -107,7 +107,7 @@ class Conversation:
             timeout=30,
             headers={
                 **HEADERS_INIT_CONVER,
-                "x-forwarded-for": f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
+                "x-forwarded-for": get_random_ip(),
                     },
             transport=transport,
             cookies=formatted_cookies,
