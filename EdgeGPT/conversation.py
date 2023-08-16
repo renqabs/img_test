@@ -121,6 +121,7 @@ class Conversation:
                 }
                 response_img = await client.post(
                     url="https://www.bing.com/images/kblob",
+                    headers=HEADER_IMG_UPLOAD,
                     files=files,
                     follow_redirects=True,
                 )
