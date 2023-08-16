@@ -13,7 +13,7 @@ from websockets.client import connect, WebSocketClientProtocol
 import certifi
 import httpx
 from BingImageCreator import ImageGenAsync
-
+from .ip_rand import get_random_ip
 from .constants import DELIMITER
 from .constants import HEADERS
 from .constants import HEADERS_INIT_CONVER
@@ -110,7 +110,7 @@ class ChatHub:
             ssl=ssl_context,
             headers={
                 **HEADERS,
-                "x-forwarded-for": f"13.{random.randint(104, 107)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
+                "x-forwarded-for": get_random_ip,
                     },
             proxy=self.proxy,
         )
