@@ -43,6 +43,8 @@ HEADERS_INIT_CONVER = {
 
 
 HEADER_IMG_UPLOAD = {
+    "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+    "accept-encoding": "gzip, deflate, br",
     "sec-ch-ua": '"Not)A;Brand";v="24", "Microsoft Edge";v="116", "Chromium";v="116",',
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": '"Windows"',
