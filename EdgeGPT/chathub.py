@@ -110,7 +110,7 @@ class ChatHub:
             ssl=ssl_context,
             headers={
                 **HEADERS,
-                "x-forwarded-for": get_random_ip,
+                "x-forwarded-for": get_random_ip(),
                     },
             proxy=self.proxy,
         )
