@@ -429,11 +429,6 @@
                 }
                 setImageInput(image_uri)
             }
-            image_uri = await resizeFile(file, "base64");
-            if (image_uri.split(",")[1].length /1024 > 1024) {
-                 throw Error("Picture too large.");
-            }
-            setImageInput(image_uri)
 	    setResponding(false);
         }
         const appendMessage = message => {
