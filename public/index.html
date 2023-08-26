@@ -470,9 +470,6 @@
                     if (!continueOnRevoke) break
                     if (result?.revoked) {
                         inputText = "Continue from your last sentence."
-                    }else if(result?.revoked_auth){
-			            removeLastestMessage()
-                        continue
                     }else {
                         break
                     }
@@ -613,13 +610,7 @@
                         finished()
 
                     } else if (response.type === "error") {
-                        if (response.error.indexOf("Sorry, you need to login first to access this service") !== -1 || 
-                            response.error.indexOf("Cannot retrieve user status") !== -1 ||
-                            response.error.indexOf("ServiceClient failure") !== -1 ||
-                            response.error.indexOf("conversationSignature") !== -1){
-                            finished({revoked_auth: true})
-                        }
-                        else if(response.error.indexOf("no close frame received") !== -1){
+                        if(response.error.indexOf("no close frame received") !== -1){
                             finished({revoked: true})
                         }
                         else{ 
