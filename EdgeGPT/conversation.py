@@ -4,7 +4,6 @@ from typing import List
 from typing import Union
 from .constants import HEADER_IMG_UPLOAD
 import httpx
-import random
 from .ip_rand import get_random_ip
 from .constants import HEADERS_INIT_CONVER
 from .exceptions import NotAllowedToAccess
@@ -17,6 +16,7 @@ class Conversation:
         async_mode: bool = False,
         cookies: Union[List[dict], None] = None,
     ) -> None:
+        self.sec_access_token: str | None = None
         if async_mode:
             return
         self.struct: dict = {
@@ -159,4 +159,6 @@ class Conversation:
             ) from exc
         if self.struct["result"]["value"] == "UnauthorizedRequest":
             raise NotAllowedToAccess(self.struct["result"]["message"])
+        if 'X-Sydney-Encryptedconversationsignature' in response.headers:
+            self.sec_access_token = response.headers['X-Sydney-Encryptedconversationsignature']
         return self

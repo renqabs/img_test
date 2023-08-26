@@ -3,7 +3,7 @@ import json
 import os
 import ssl
 import sys
-import random
+import urllib.parse
 from time import time
 from typing import Generator
 from typing import List
@@ -38,8 +38,9 @@ class ChatHub:
         self.request: ChatHubRequest
         self.loop: bool
         self.task: asyncio.Task
+        self.sec_access_token: str | None = conversation.sec_access_token
         self.request = ChatHubRequest(
-            conversation_signature=conversation.struct["conversationSignature"],
+            conversation_signature=conversation.struct.get("conversationSignature"),
             client_id=conversation.struct["clientId"],
             conversation_id=conversation.struct["conversationId"],
             blobId=conversation.img_id["blobId"],
@@ -99,6 +100,11 @@ class ChatHub:
         locale: str = guess_locale(),
     ) -> Generator[bool, Union[dict, str], None]:
         """ """
+        if self.sec_access_token:
+            wss_link = (
+                "wss://sydney.bing.com/sydney/ChatHub?sec_access_token="
+                + urllib.parse.quote_plus(self.sec_access_token),
+            )
         cookies = {}
         if self.cookies is not None:
             for cookie in self.cookies:
