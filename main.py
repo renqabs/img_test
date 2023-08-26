@@ -16,25 +16,42 @@ from aiohttp import web
 
 async def sydney_process_message(user_message, context, _U, locale, imageInput):
     chatbot = None
-    try:
-        if _U:
-            os.environ['image_gen_cookie'] = _U
-        #else:
-        cookies = [
-            {
-                "name": "_U",
-                "value": "qrtewrytigiooupipp"
-            },
-        ] 
-        chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
-        async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative",raw=True,
-                                                    webpage_context=context, search_result=True, locale=locale):
-            yield response
-    except:
-        yield {"type": "error", "error": traceback.format_exc()}
-    finally:
-        if chatbot:
-            await chatbot.close()
+    # Set the maximum number of retries
+    max_retries = 5
+    for i in range(max_retries + 1):
+        try:
+            cookies = loaded_cookies
+            if _U:
+                os.environ['image_gen_cookie'] = _U
+            cookies = [
+                {
+                    "name": "_U",
+                    "value": "qrtewrytigiooupipp"
+                },
+            ]
+            chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
+            async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative", raw=True,
+                                                        webpage_context=context, search_result=True, locale=locale):
+                yield response
+            break
+        except Exception as e:
+            if (
+                "Sorry, you need to login first to access this service." in str(e)
+                or "ServiceClient failure for DeepLeo" in str(e)
+                or "Cannot retrieve user status" in str(e)
+                or "Authentication failed" in str(e)
+                or "conversationSignature" in str(e)
+            ) and i < max_retries:
+                print("Retrying...", i + 1, "attempts.")
+                await asyncio.sleep(2)
+            else:
+                if i == max_retries:
+                    print("Failed after", max_retries, "attempts.")
+                yield {"type": "error", "error": traceback.format_exc()}
+        finally:
+            if chatbot:
+                await chatbot.close()
+
 
 
 async def claude_process_message(context):
