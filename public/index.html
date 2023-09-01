@@ -487,7 +487,7 @@
                     if (window.location.protocol === "https:") {
                         wssLink = `wss://${window.location.host}/ws/`
                     }
-
+                    websocket = new WebSocket(wssLink)
                     websocket.onopen = () => {
                         resolve()
                     }
