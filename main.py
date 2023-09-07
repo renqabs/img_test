@@ -34,7 +34,7 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
                 },
                 {
                     "name": "MUID",
-                    "value": "0B1629CA14F96D762AA13A4E15606C78"
+                    "value": "1B1720CA14F96D862AA13A4E14606F78"
                 },
             ]
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
