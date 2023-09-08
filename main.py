@@ -52,7 +52,7 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
                 muid = re.search(r"(?<=MUID=)[0-9A-F]{32}(?=;)", response_muid.headers['Set-Cookie']).group(0)
                 if muid is not None and len(muid)==32:
                    cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": muid}]
-                   print(cookies)
+                   #print(cookies)
             except:
                 raise Exception("get muid failed")
         try:
