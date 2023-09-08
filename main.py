@@ -33,7 +33,10 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
             "value": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=2.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796"
         },
     ]
-    async with httpx.AsyncClient(
+    # Set the maximum number of retries
+    max_retries = 5
+    for i in range(max_retries + 1):
+        async with httpx.AsyncClient(
                 proxies=args.proxy or None,
                 timeout=30,
                 headers=HEADERS_INIT_CONVER
@@ -47,12 +50,11 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
                 print(response_muid.url)
             try:
                 muid = re.search(r"(?<=MUID=)[0-9A-F]{32}(?=;)", response_muid.headers['Set-Cookie']).group(0)
-                cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": muid}]
+                if muid is not None and len(muid)==32:
+                   cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": muid}]
+                   print(cookies)
             except:
                 raise Exception("get muid failed")
-    # Set the maximum number of retries
-    max_retries = 5
-    for i in range(max_retries + 1):
         try:
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
             async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative", raw=True,
