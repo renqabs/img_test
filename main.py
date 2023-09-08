@@ -6,33 +6,54 @@ import urllib.request
 import emoji
 import claude
 import sys, os
+import re
+import httpx
+import uuid
 sys.path.insert(0, os.path.dirname(__file__))
 
 public_dir = '/public'
 
 from EdgeGPT.EdgeGPT import Chatbot
+from EdgeGPT.constants import HEADERS_INIT_CONVER
 from aiohttp import web
 
 
 async def sydney_process_message(user_message, context, _U, locale, imageInput):
     chatbot = None
+    cookies = loaded_cookies
+    if _U:
+        os.environ['image_gen_cookie'] = _U
+    cookies = [
+        {
+            "name": "_U",
+            "value": "qrtewrytigiooupipp"
+        },
+        {
+            "name": "SRCHHPGUSR",
+            "value": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=2.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796"
+        },
+    ]
+    async with httpx.AsyncClient(
+                proxies=args.proxy or None,
+                timeout=30,
+                headers=HEADERS_INIT_CONVER
+        ) as client:
+            response_muid = await client.get(
+                url=f"https://www.bing.com/?form=000047&ocid=msedgntp&cvid={str(uuid.uuid4()).replace('-','')}&ei=14",
+                follow_redirects=True,
+            )
+            if response_muid.status_code != 200:
+                print(f"Status code: {response_muid.status_code}")
+                print(response_muid.url)
+            try:
+                muid = re.search(r"(?<=MUID=)[0-9A-F]{32}(?=;)", response_muid.headers['Set-Cookie']).group(0)
+                cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": muid}]
+            except:
+                raise Exception("get muid failed")
     # Set the maximum number of retries
     max_retries = 5
     for i in range(max_retries + 1):
         try:
-            cookies = loaded_cookies
-            if _U:
-                os.environ['image_gen_cookie'] = _U
-            cookies = [
-                {
-                    "name": "_U",
-                    "value": "qrtewrytigiooupipp"
-                },
-                {
-                    "name": "SRCHHPGUSR",
-                    "value": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=2.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796"
-                },
-            ]
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
             async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative", raw=True,
                                                         webpage_context=context, search_result=True, locale=locale):
