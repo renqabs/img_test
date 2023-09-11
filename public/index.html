@@ -398,6 +398,7 @@
         const [editingMessageIndex, setEditingMessageIndex] = React.useState(null)
         const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false)
         const [_UOverride, set_UOverride] = React.useState(localStorage.getItem('_U'))
+        const [MUIDCookie, setMUIDCookie] = React.useState(localStorage.getItem('MUID'))
         const imageUploadInput = React.useRef(null);
         const [imageInput, setImageInput] = React.useState('')
         const [enableTTS, setEnableTTS] = React.useState(false)
@@ -419,7 +420,7 @@
             });
 
         const handleUploadImage = async event => {
-	    setResponding(true);
+	        setResponding(true);
             let image_uri = "";
             let file = event.target.files[0];
             if (file){
@@ -429,8 +430,17 @@
                 }
                 setImageInput(image_uri)
             }
-	    setResponding(false);
+	        setResponding(false);
         }
+	const EscapeSpecialCharacters = message => {
+	  const keysToFilter = ['text', 'hiddenText', 'suggestions', 'searchResults'];
+	  for (let key in message) {
+	    if (keysToFilter.includes(key) && typeof message[key] === 'string') {
+	      message[key] = message[key].replace(/`/g, "\`");
+	    }
+	  }
+	  return message;
+	}
         const appendMessage = message => {
             setPreviousMessages(prevMessages => [...prevMessages, message])
         }
@@ -488,6 +498,7 @@
                         wssLink = `wss://${window.location.host}/ws/`
                     }
                     websocket = new WebSocket(wssLink)
+
                     websocket.onopen = () => {
                         resolve()
                     }
@@ -508,6 +519,7 @@
                 message: userInput,
                 context: formatPreviousMessages(currentPreviousMessages, botType),
                 _U: _UOverride,
+                MUID: MUIDCookie,
                 locale: locale,
                 imageInput: imageInput,
                 botType
@@ -616,7 +628,7 @@
                         if(response.error.indexOf("no close frame received") !== -1){
                             finished({revoked: true})
                         }
-                        else{ 
+                        else{
                             reject(response.error)
                         }
                     }
@@ -832,6 +844,10 @@
 						<button id="stopBtn" className="button" onClick={stopMessage} disabled={!responding}>
                             Stop
                         </button>
+                        <label id="image_upload"><img src="upload_image.png" alt="bg_upload_image"/>
+                            <input type="file" id="image-file" accept="image/*" ref={imageUploadInput}
+                            onChange={handleUploadImage}/>
+                        </label>
                         <select
                             id="send-mode-selector"
                             className="selector"
@@ -865,15 +881,19 @@
                             <option value="Claude">Claude</option>
                         </select>
                         <div>Context: {contextTokens} tokens, User Input: {userInputTokens} tokens</div>
-                        <label>_U cookie:&nbsp;
+                    </div>
+                    <div className="cookies-div" style={{display: "flex", flexWrap: "wrap"}}>
+                        <label style={{ marginRight: "20px" }}>_U:&nbsp;
                             <input onChange={event => {
                                 set_UOverride(event.target.value)
                                 localStorage.setItem('_U', event.target.value)
-                            }} value={_UOverride} placeholder="Enter cookie here"/>
+                            }} value={_UOverride} placeholder="Enter _U cookie"/>
                         </label>
-                        <label id="image_upload"><img src="upload_image.png" alt="bg_upload_image"/>
-                            <input type="file" id="image-file" accept="image/*" ref={imageUploadInput}
-                            onChange={handleUploadImage}/>
+                        <label>MUID:&nbsp;
+                            <input onChange={event => {
+                                setMUIDCookie(event.target.value)
+                                localStorage.setItem('MUID', event.target.value)
+                            }} value={MUIDCookie} placeholder="Enter MUID cookie"/>
                         </label>
                     </div>
                 </div>
