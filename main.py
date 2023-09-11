@@ -58,7 +58,7 @@ async def sydney_process_message(user_message, context, _U, MUID, locale, imageI
                        #print(cookies)
                 except:
                     raise Exception("get muid failed")
-        print(cookies)
+        #print(cookies)
         try:
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
             async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative", raw=True,
