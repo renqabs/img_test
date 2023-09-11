@@ -18,7 +18,7 @@ from EdgeGPT.constants import HEADERS_INIT_CONVER
 from aiohttp import web
 
 
-async def sydney_process_message(user_message, context, _U, locale, imageInput):
+async def sydney_process_message(user_message, context, _U, MUID, locale, imageInput):
     chatbot = None
     cookies = loaded_cookies
     if _U:
@@ -36,25 +36,29 @@ async def sydney_process_message(user_message, context, _U, locale, imageInput):
     # Set the maximum number of retries
     max_retries = 5
     for i in range(max_retries + 1):
-        async with httpx.AsyncClient(
-                proxies=args.proxy or None,
-                timeout=30,
-                headers=HEADERS_INIT_CONVER
-        ) as client:
-            response_muid = await client.get(
-                url=f"https://www.bing.com/?form=000047&ocid=msedgntp&cvid={str(uuid.uuid4()).replace('-','')}&ei=14",
-                follow_redirects=True,
-            )
-            if response_muid.status_code != 200:
-                print(f"Status code: {response_muid.status_code}")
-                print(response_muid.url)
-            try:
-                muid = re.search(r"(?<=MUID=)[0-9A-F]{32}(?=;)", response_muid.headers['Set-Cookie']).group(0)
-                if muid is not None and len(muid)==32:
-                   cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": muid}]
-                   #print(cookies)
-            except:
-                raise Exception("get muid failed")
+        if MUID:
+            cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID", "value": MUID}]
+        else:
+            async with httpx.AsyncClient(
+                    proxies=args.proxy or None,
+                    timeout=30,
+                    headers=HEADERS_INIT_CONVER
+            ) as client:
+                response_muid = await client.get(
+                    url=f"https://www.bing.com/?form=000047&ocid=msedgntp&cvid={str(uuid.uuid4()).replace('-','')}&ei=14",
+                    follow_redirects=True,
+                )
+                if response_muid.status_code != 200:
+                    print(f"Status code: {response_muid.status_code}")
+                    print(response_muid.url)
+                try:
+                    muid = re.search(r"(?<=MUID=)[0-9A-F]{32}(?=;)", response_muid.headers['Set-Cookie']).group(0)
+                    if muid is not None and len(muid)==32:
+                       cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": muid}]
+                       #print(cookies)
+                except:
+                    raise Exception("get muid failed")
+        print(cookies)
         try:
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
             async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative", raw=True,
@@ -121,13 +125,14 @@ async def websocket_handler(request):
                 context = request['context']
                 locale = request['locale']
                 _U = request.get('_U')
+                MUID = request.get('MUID')
                 if (request.get('imageInput') is not None) and (len(request.get('imageInput')) > 0):
                     imageInput = request.get('imageInput').split(",")[1]
                 else:
                     imageInput = None
                 bot_type = request.get("botType", "Sydney")
                 if bot_type == "Sydney":
-                    async for response in sydney_process_message(user_message, context, _U, locale=locale, imageInput=imageInput):
+                    async for response in sydney_process_message(user_message, context, _U, MUID, locale=locale, imageInput=imageInput):
                         await ws.send_json(response)
                 elif bot_type == "Claude":
                     async for response in claude_process_message(context):
