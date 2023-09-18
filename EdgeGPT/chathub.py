@@ -148,7 +148,7 @@ class ChatHub:
             else:
                 continue
             for obj in objects:
-                if int(time()) % 6 == 0:
+                if int(time()) % 15 == 0:
                     await wss.send_str(append_identifier({"type": 6}))
                 if obj is None or not obj:
                     continue
