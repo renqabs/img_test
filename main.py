@@ -38,7 +38,6 @@ async def sydney_process_message(user_message, bot_mode, context, _U, MUID, loca
                     "name": "SRCHHPGUSR",
                     "value": SRCHHPGUSR[bot_mode]
                  }]
-    print(cookies)
     # Set the maximum number of retries
     max_retries = 5
     for i in range(max_retries + 1):
