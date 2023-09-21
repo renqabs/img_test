@@ -36,12 +36,15 @@ class ConversationStyle(Enum):
         "disable_emoji_spoken_text",
         "responsible_ai_policy_235",
         "enablemm",
+        "dv3sugg",
+        "iyxapbing",
+        "iycapbing",
         "galileo",
         "saharagenconv5",
-        "objopinion",
-        "dsblhlthcrd",
-        "dv3sugg",
-        "autosave",
+        "log2sph",
+        "fluxtables",
+        "eredirecturl",
+        "nojbfedge",
     ]
     precise = [
         "nlu_direct_response_filter",
@@ -49,13 +52,18 @@ class ConversationStyle(Enum):
         "disable_emoji_spoken_text",
         "responsible_ai_policy_235",
         "enablemm",
-        "h3precise",
-        "objopinion",
-        "dsblhlthcrd",
         "dv3sugg",
-        "autosave",
+        "iyxapbing",
+        "iycapbing",
+        "h3precise",
         "clgalileo",
         "gencontentv3",
+        "mthslvv2",
+        "logprobsc",
+        "log2sph",
+        "tchhlpansgnd",
+        "eredirecturl",
+        "nojbfedge"
     ]
 
 
