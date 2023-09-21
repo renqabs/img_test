@@ -18,7 +18,7 @@ from EdgeGPT.constants import HEADERS_INIT_CONVER
 from aiohttp import web
 
 
-async def sydney_process_message(user_message, context, _U, MUID, locale, imageInput):
+async def sydney_process_message(user_message, bot_mode, context, _U, MUID, locale, imageInput):
     chatbot = None
     cookies = loaded_cookies
     if _U:
@@ -27,12 +27,18 @@ async def sydney_process_message(user_message, context, _U, MUID, locale, imageI
         {
             "name": "_U",
             "value": "qrtewrytigiooupipp"
-        },
-        {
-            "name": "SRCHHPGUSR",
-            "value": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=2.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796"
-        },
-    ]
+        }]
+    SRCHHPGUSR = {
+                "creative": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3,nojbfedge&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=2.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796",
+                "precise": "cdxtone=Precise&cdxtoneopts=h3precise,clgalileo,gencontentv3,nojbfedge",
+                "balanced": "cdxtone=Balanced&cdxtoneopts=galileo,fluxhint,glfluxv13,nojbfedge"
+                 }
+    cookies += [
+                {
+                    "name": "SRCHHPGUSR",
+                    "value": SRCHHPGUSR[bot_mode]
+                 }]
+    print(cookies)
     # Set the maximum number of retries
     max_retries = 5
     for i in range(max_retries + 1):
@@ -61,7 +67,7 @@ async def sydney_process_message(user_message, context, _U, MUID, locale, imageI
         #print(cookies)
         try:
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
-            async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style="creative", raw=True,
+            async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style=bot_mode, raw=True,
                                                         webpage_context=context, search_result=True, locale=locale):
                 yield response
             break
@@ -131,8 +137,9 @@ async def websocket_handler(request):
                 else:
                     imageInput = None
                 bot_type = request.get("botType", "Sydney")
+                bot_mode = request.get("botMode", "creative")
                 if bot_type == "Sydney":
-                    async for response in sydney_process_message(user_message, context, _U, MUID, locale=locale, imageInput=imageInput):
+                    async for response in sydney_process_message(user_message, bot_mode, context, _U, MUID, locale=locale, imageInput=imageInput):
                         await ws.send_json(response)
                 elif bot_type == "Claude":
                     async for response in claude_process_message(context):
