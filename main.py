@@ -21,15 +21,20 @@ from aiohttp import web
 async def sydney_process_message(user_message, bot_mode, context, _U, MUID, locale, imageInput):
     chatbot = None
     cookies = loaded_cookies
+    image_gen_cookie = []
     if _U:
-        os.environ['image_gen_cookie'] = _U
+        image_gen_cookie +=  [
+                  {
+                      "name": "_U",
+                      "value": _U
+                  }]
     cookies = [
         {
             "name": "_U",
             "value": "qrtewrytigiooupipp"
         }]
     SRCHHPGUSR = {
-                "creative": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3,nojbfedge&BRW=XW&BRH=M&CW=1496&CH=796&SCW=1496&SCH=796&DPR=2.3&UTC=480&DM=0&PRVCW=1496&PRVCH=796",
+                "creative": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3,nojbfedge",
                 "precise": "cdxtone=Precise&cdxtoneopts=h3precise,clgalileo,gencontentv3,nojbfedge",
                 "balanced": "cdxtone=Balanced&cdxtoneopts=galileo,fluxhint,glfluxv13,nojbfedge"
                  }
@@ -38,6 +43,12 @@ async def sydney_process_message(user_message, bot_mode, context, _U, MUID, loca
                     "name": "SRCHHPGUSR",
                     "value": SRCHHPGUSR[bot_mode]
                  }]
+    image_gen_cookie += [
+            {
+                "name": "SRCHHPGUSR",
+                "value": SRCHHPGUSR[bot_mode]
+             }]
+    os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
     # Set the maximum number of retries
     max_retries = 5
     for i in range(max_retries + 1):
