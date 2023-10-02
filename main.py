@@ -48,7 +48,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, MUID, loca
                 "name": "SRCHHPGUSR",
                 "value": SRCHHPGUSR[bot_mode]
              }]
-    # os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
+    os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
     # Set the maximum number of retries
     max_retries = 5
     for i in range(max_retries + 1):
@@ -74,8 +74,6 @@ async def sydney_process_message(user_message, bot_mode, context, _U, MUID, loca
                        #print(cookies)
                 except:
                     raise Exception("get muid failed")
-        image_gen_cookie += list(filter(lambda d: d.get('name') != 'MUID', image_gen_cookie)) + [{"name": "MUID", "value": MUID}]
-        os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
         #print(cookies)
         try:
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
