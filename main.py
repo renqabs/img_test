@@ -18,36 +18,22 @@ from EdgeGPT.constants import HEADERS_INIT_CONVER
 from aiohttp import web
 
 
-async def sydney_process_message(user_message, bot_mode, context, _U, MUID, locale, imageInput):
+async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale, imageInput):
     chatbot = None
     cookies = loaded_cookies
     image_gen_cookie = []
     if _U:
-        image_gen_cookie +=  [
-                  {
-                      "name": "_U",
-                      "value": _U
-                  }]
-    cookies = [
-        {
-            "name": "_U",
-            "value": "qrtewrytigiooupipp"
-        }]
+        image_gen_cookie += [{"name": "_U", "value": _U}]
+    if KievRPSSecAuth:
+        image_gen_cookie += [{"name": "KievRPSSecAuth", "value": KievRPSSecAuth}]
+    cookies = [{"name": "_U", "value": "qrtewrytigiooupipp"}]
     SRCHHPGUSR = {
                 "creative": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3,nojbfedge",
                 "precise": "cdxtone=Precise&cdxtoneopts=h3precise,clgalileo,gencontentv3,nojbfedge",
                 "balanced": "cdxtone=Balanced&cdxtoneopts=galileo,fluxhint,glfluxv13,nojbfedge"
                  }
-    cookies += [
-                {
-                    "name": "SRCHHPGUSR",
-                    "value": SRCHHPGUSR[bot_mode]
-                 }]
-    image_gen_cookie += [
-            {
-                "name": "SRCHHPGUSR",
-                "value": SRCHHPGUSR[bot_mode]
-             }]
+    cookies += [{"name": "SRCHHPGUSR", "value": SRCHHPGUSR[bot_mode]}]
+    image_gen_cookie += [{"name": "SRCHHPGUSR", "value": SRCHHPGUSR[bot_mode]}]
     os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
     # Set the maximum number of retries
     max_retries = 5
@@ -142,6 +128,7 @@ async def websocket_handler(request):
                 locale = request['locale']
                 _U = request.get('_U')
                 MUID = request.get('MUID')
+                KievRPSSecAuth = request.get('KievRPSSecAuth')
                 if (request.get('imageInput') is not None) and (len(request.get('imageInput')) > 0):
                     imageInput = request.get('imageInput').split(",")[1]
                 else:
@@ -149,7 +136,7 @@ async def websocket_handler(request):
                 bot_type = request.get("botType", "Sydney")
                 bot_mode = request.get("botMode", "creative")
                 if bot_type == "Sydney":
-                    async for response in sydney_process_message(user_message, bot_mode, context, _U, MUID, locale=locale, imageInput=imageInput):
+                    async for response in sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale=locale, imageInput=imageInput):
                         await ws.send_json(response)
                 elif bot_type == "Claude":
                     async for response in claude_process_message(context):
