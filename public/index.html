@@ -398,6 +398,7 @@
         const [editingMessageIndex, setEditingMessageIndex] = React.useState(null)
         const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false)
         const [_UOverride, set_UOverride] = React.useState(localStorage.getItem('_U'))
+        const [KievRPSSecAuthCookie, setKievRPSSecAuthCookie] = React.useState(localStorage.getItem('KievRPSSecAuth'))
         const [MUIDCookie, setMUIDCookie] = React.useState(localStorage.getItem('MUID'))
         const imageUploadInput = React.useRef(null);
         const [imageInput, setImageInput] = React.useState('')
@@ -520,6 +521,7 @@
                 message: userInput,
                 context: formatPreviousMessages(currentPreviousMessages, botType),
                 _U: _UOverride,
+                KievRPSSecAuth: KievRPSSecAuthCookie,
                 MUID: MUIDCookie,
                 locale: locale,
                 imageInput: imageInput,
@@ -897,12 +899,18 @@
                         </select>
                         <div>Context: {contextTokens} tokens, User Input: {userInputTokens} tokens</div>
                     </div>
-                    <div className="cookies-div" style={{display: "flex", flexWrap: "wrap"}}>
-                        <label style={{ marginRight: "20px" }}>_U:&nbsp;
+                    <div className="cookies-div" style={{display: "flex", justifyContent: "space-between", flexWrap: "wrap"}}>
+                        <label>_U:&nbsp;
                             <input onChange={event => {
                                 set_UOverride(event.target.value)
                                 localStorage.setItem('_U', event.target.value)
                             }} value={_UOverride} placeholder="Enter _U cookie"/>
+                        </label>
+                        <label>KievRPSSecAuth:&nbsp;
+                            <input onChange={event => {
+                                setKievRPSSecAuthCookie(event.target.value)
+                                localStorage.setItem('KievRPSSecAuth', event.target.value)
+                            }} value={KievRPSSecAuthCookie} placeholder="Enter KievRPSSecAuth cookie"/>
                         </label>
                         <label>MUID:&nbsp;
                             <input onChange={event => {
