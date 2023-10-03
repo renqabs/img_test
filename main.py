@@ -26,7 +26,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
         image_gen_cookie += [{"name": "_U", "value": _U}]
     if KievRPSSecAuth:
         image_gen_cookie += [{"name": "KievRPSSecAuth", "value": KievRPSSecAuth}]
-    cookies = [{"name": "_U", "value": "qrtewrytigiooupipp"}]
+    cookies = [{"name": "_U", "value": str(uuid.uuid4()).replace('-','')}]
     SRCHHPGUSR = {
                 "creative": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3,nojbfedge",
                 "precise": "cdxtone=Precise&cdxtoneopts=h3precise,clgalileo,gencontentv3,nojbfedge",
@@ -47,7 +47,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                     headers=HEADERS_INIT_CONVER
             ) as client:
                 response_muid = await client.get(
-                    url=f"https://www.bing.com/?form=000047&ocid=msedgntp&cvid={str(uuid.uuid4()).replace('-','')}&ei=14",
+                    url=f"https://www.bing.com/search?q=Bing+AI",
                     follow_redirects=True,
                 )
                 if response_muid.status_code != 200:
