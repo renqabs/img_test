@@ -71,7 +71,7 @@ class Conversation:
     async def create(
         proxy: Union[str, None] = None,
         cookies: Union[List[dict], None] = None,
-        imageInput: str | None = None
+        imageInput: str = None
     ) -> "Conversation":
         self = Conversation(async_mode=True)
         self.struct = {
