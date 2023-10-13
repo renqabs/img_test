@@ -33,7 +33,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                 "balanced": "cdxtone=Balanced&cdxtoneopts=galileo,fluxhint,glfluxv13,nojbfedge"
                  }
     cookies += [{"name": "SRCHHPGUSR", "value": SRCHHPGUSR[bot_mode]}]
-    image_gen_cookie += [{"name": "SRCHHPGUSR", "value": SRCHHPGUSR[bot_mode]}]
+    image_gen_cookie += [{"name": "SRCHHPGUSR", "value": "SRCHLANG=zh-Hans&" + SRCHHPGUSR[bot_mode]}]
     os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
     # Set the maximum number of retries
     max_retries = 5
