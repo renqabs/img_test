@@ -18,7 +18,7 @@ from EdgeGPT.constants import HEADERS_INIT_CONVER
 from aiohttp import web
 
 
-async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale, imageInput):
+async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale, imageInput, enableSearch):
     chatbot = None
     cookies = loaded_cookies
     image_gen_cookie = []
@@ -64,7 +64,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
         try:
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
             async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style=bot_mode, raw=True,
-                                                        webpage_context=context, search_result=True, locale=locale):
+                                                        webpage_context=context, search_result=enableSearch, locale=locale):
                 yield response
             break
         except Exception as e:
@@ -129,6 +129,7 @@ async def websocket_handler(request):
                 locale = request['locale']
                 _U = request.get('_U')
                 MUID = request.get('MUID')
+                enableSearch = request.get('enableSearch')
                 KievRPSSecAuth = request.get('KievRPSSecAuth')
                 if (request.get('imageInput') is not None) and (len(request.get('imageInput')) > 0):
                     imageInput = request.get('imageInput').split(",")[1]
@@ -137,7 +138,7 @@ async def websocket_handler(request):
                 bot_type = request.get("botType", "Sydney")
                 bot_mode = request.get("botMode", "creative")
                 if bot_type == "Sydney":
-                    async for response in sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale=locale, imageInput=imageInput):
+                    async for response in sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale=locale, imageInput=imageInput, enableSearch=enableSearch):
                         await ws.send_json(response)
                 elif bot_type == "Claude":
                     async for response in claude_process_message(context):
