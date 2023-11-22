@@ -43,7 +43,7 @@ class ChatHubRequest:
         if conversation_style:
             if not isinstance(conversation_style, ConversationStyle):
                 conversation_style = getattr(ConversationStyle, conversation_style)
-            options = conversation_style.value
+            options = conversation_style.value.copy()
         message_id = str(uuid.uuid4())
         # Get the current local time
         now_local = datetime.now()
