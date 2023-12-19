@@ -18,7 +18,7 @@ from EdgeGPT.constants import HEADERS_INIT_CONVER
 from aiohttp import web
 
 
-async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale, imageInput, enableSearch):
+async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale, enable_gpt4turbo, imageInput, enableSearch):
     chatbot = None
     cookies = loaded_cookies
     image_gen_cookie = []
@@ -64,7 +64,8 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
         try:
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
             async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style=bot_mode, raw=True,
-                                                        webpage_context=context, search_result=enableSearch, locale=locale):
+                                                        webpage_context=context, search_result=enableSearch,
+                                                        locale=locale, enable_gpt4turbo=enable_gpt4turbo):
                 yield response
             break
         except Exception as e:
@@ -127,6 +128,7 @@ async def websocket_handler(request):
                 user_message = request['message']
                 context = request['context']
                 locale = request['locale']
+                enable_gpt4turbo = request['enable_gpt4turbo']
                 _U = request.get('_U')
                 MUID = request.get('MUID')
                 enableSearch = request.get('enableSearch')
@@ -138,7 +140,7 @@ async def websocket_handler(request):
                 bot_type = request.get("botType", "Sydney")
                 bot_mode = request.get("botMode", "creative")
                 if bot_type == "Sydney":
-                    async for response in sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale=locale, imageInput=imageInput, enableSearch=enableSearch):
+                    async for response in sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale=locale, enable_gpt4turbo=enable_gpt4turbo, imageInput=imageInput, enableSearch=enableSearch):
                         await ws.send_json(response)
                 elif bot_type == "Claude":
                     async for response in claude_process_message(context):
