@@ -47,7 +47,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                     headers=HEADERS_INIT_CONVER
             ) as client:
                 response_muid = await client.get(
-                    url=f"https://www.bing.com/search?q=Bing+AI",
+                    url=f"https://www.bing.com/search?q={uuid.uuid4()}",
                     follow_redirects=True,
                 )
                 if response_muid.status_code != 200:
