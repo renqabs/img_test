@@ -9,14 +9,17 @@ import sys, os
 import re
 import httpx
 import uuid
+import random
 sys.path.insert(0, os.path.dirname(__file__))
-
 public_dir = '/public'
 
 from EdgeGPT.EdgeGPT import Chatbot
 from EdgeGPT.constants import HEADERS_INIT_CONVER
 from aiohttp import web
 
+def generate_hex_string(length):
+    hex_digits = '0123456789ABCDEF'
+    return ''.join(random.choice(hex_digits) for _ in range(length))
 
 async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale, enable_gpt4turbo, imageInput, enableSearch):
     chatbot = None
@@ -41,25 +44,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
         if MUID:
             cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID", "value": MUID}]
         else:
-            async with httpx.AsyncClient(
-                    proxies=args.proxy or None,
-                    timeout=30,
-                    headers=HEADERS_INIT_CONVER
-            ) as client:
-                response_muid = await client.get(
-                    url=f"https://www.bing.com/search?q={uuid.uuid4()}",
-                    follow_redirects=True,
-                )
-                if response_muid.status_code != 200:
-                    print(f"Status code: {response_muid.status_code}")
-                    print(response_muid.url)
-                try:
-                    muid = re.search(r"(?<=MUID=)[0-9A-F]{32}(?=;)", response_muid.headers['Set-Cookie']).group(0)
-                    if muid is not None and len(muid)==32:
-                       cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": muid}]
-                       #print(cookies)
-                except:
-                    raise Exception("get muid failed")
+            cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": generate_hex_string(32)}]
         #print(cookies)
         try:
             chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
