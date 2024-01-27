@@ -21,7 +21,7 @@ def generate_hex_string(length):
     hex_digits = '0123456789ABCDEF'
     return ''.join(random.choice(hex_digits) for _ in range(length))
 
-async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale, enable_gpt4turbo, imageInput, enableSearch):
+async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, VerifyServer, locale, enable_gpt4turbo, imageInput, enableSearch):
     chatbot = None
     cookies = loaded_cookies
     image_gen_cookie = []
@@ -41,13 +41,14 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
     # Set the maximum number of retries
     max_retries = 5
     for i in range(max_retries + 1):
-        if MUID:
-            cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID", "value": MUID}]
-        else:
-            cookies = list(filter(lambda d: d.get('name') != 'MUID', cookies)) + [{"name": "MUID","value": generate_hex_string(32)}]
         #print(cookies)
+        if os.environ.get('cookies_captcha_solved'):
+            cookies_bot = json.loads(os.environ.get('cookies_captcha_solved'))
+        else:
+            cookies_bot = cookies
+        #print(f"cookies_bot:{cookies_bot}")
         try:
-            chatbot = await Chatbot.create(cookies=cookies, proxy=args.proxy, imageInput=imageInput)
+            chatbot = await Chatbot.create(cookies=cookies_bot, proxy=args.proxy, imageInput=imageInput)
             async for _, response in chatbot.ask_stream(prompt=user_message, conversation_style=bot_mode, raw=True,
                                                         webpage_context=context, search_result=enableSearch,
                                                         locale=locale, enable_gpt4turbo=enable_gpt4turbo):
@@ -64,6 +65,31 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
             ) and i < max_retries:
                 print("Retrying...", i + 1, "attempts.")
                 await asyncio.sleep(2)
+            elif "User needs to solve CAPTCHA" in str(e):
+                if VerifyServer:
+                    async with httpx.AsyncClient(
+                            proxies=args.proxy or None,
+                            timeout=30,
+                            headers={"Content-Type": "application/json",
+                                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0"},
+                    ) as client:
+                        #print("solve CAPTCHA ...")
+                        await asyncio.sleep(random.randint(0,5))
+                        response_cap = await client.post(
+                            url=VerifyServer,
+                            json={"cookies:": ""},
+                            follow_redirects=True,
+                        )
+                        if response_cap.status_code != 200:
+                            yield {"type": "error", "error": "solve CAPTCHA Failed"}
+                            #print(f"Status code: {response_cap.status_code}")
+                            #print(response_cap.url)
+                        else:
+                            response_cap_cookie_str = response_cap.json()['result']['cookies']
+                            cookies_new = [dict(name=item.split("=")[0], value=item.split("=",1)[1]) for item in response_cap_cookie_str.split("; ")]
+                            cookies_new = list(filter(lambda d: d.get('name') != '_U', cookies_new)) + [
+                                {"name": "_U", "value": [d['value'] for d in cookies if d['name'] == '_U'][0]}]
+                            os.environ['cookies_captcha_solved'] = json.dumps(cookies_new)
             else:
                 if i == max_retries:
                     print("Failed after", max_retries, "attempts.")
@@ -116,6 +142,7 @@ async def websocket_handler(request):
                 enable_gpt4turbo = request['enable_gpt4turbo']
                 _U = request.get('_U')
                 MUID = request.get('MUID')
+                VerifyServer = request.get('VerifyServer')
                 enableSearch = request.get('enableSearch')
                 KievRPSSecAuth = request.get('KievRPSSecAuth')
                 if (request.get('imageInput') is not None) and (len(request.get('imageInput')) > 0):
@@ -125,7 +152,7 @@ async def websocket_handler(request):
                 bot_type = request.get("botType", "Sydney")
                 bot_mode = request.get("botMode", "creative")
                 if bot_type == "Sydney":
-                    async for response in sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, locale=locale, enable_gpt4turbo=enable_gpt4turbo, imageInput=imageInput, enableSearch=enableSearch):
+                    async for response in sydney_process_message(user_message, bot_mode, context, _U, KievRPSSecAuth, MUID, VerifyServer, locale=locale, enable_gpt4turbo=enable_gpt4turbo, imageInput=imageInput, enableSearch=enableSearch):
                         await ws.send_json(response)
                 elif bot_type == "Claude":
                     async for response in claude_process_message(context):
@@ -175,7 +202,7 @@ if __name__ == '__main__':
         print("cookies.json not found")
 
     claude_chatbot = claude.Chatbot(proxy=args.proxy)
-
+    os.environ['cookies_captcha_solved'] = ""
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(main(host, port))

@@ -402,6 +402,7 @@
         const [_UOverride, set_UOverride] = React.useState(localStorage.getItem('_U'))
         const [KievRPSSecAuthCookie, setKievRPSSecAuthCookie] = React.useState(localStorage.getItem('KievRPSSecAuth'))
         const [MUIDCookie, setMUIDCookie] = React.useState(localStorage.getItem('MUID'))
+        const [VerifyServer, setVerifyServer] = React.useState(localStorage.getItem('VerifyServer'))
         const imageUploadInput = React.useRef(null);
         const [imageInput, setImageInput] = React.useState('')
         const [enableTTS, setEnableTTS] = React.useState(false)
@@ -529,6 +530,7 @@
                 imageInput: imageInput,
                 enableSearch,
                 enable_gpt4turbo,
+                VerifyServer,
                 botType,
                 botMode
             }))
@@ -927,6 +929,12 @@
                                 setMUIDCookie(event.target.value)
                                 localStorage.setItem('MUID', event.target.value)
                             }} value={MUIDCookie} placeholder="Enter MUID cookie"/>
+                        </label>
+                        <label>VerifyServer:&nbsp;
+                            <input onChange={event => {
+                                setVerifyServer(event.target.value)
+                                localStorage.setItem('VerifyServer', event.target.value)
+                            }} value={VerifyServer} placeholder="Enter Verify Server"/>
                         </label>
                     </div>
                 </div>
