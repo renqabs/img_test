@@ -25,7 +25,6 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
     chatbot = None
     cookies = loaded_cookies
     image_gen_cookie = []
-    '''
     if _U:
         image_gen_cookie += [{"name": "_U", "value": _U}]
     if KievRPSSecAuth:
@@ -38,7 +37,6 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                  }
     cookies += [{"name": "SRCHHPGUSR", "value": SRCHHPGUSR[bot_mode]}]
     image_gen_cookie += [{"name": "SRCHHPGUSR", "value": "SRCHLANG=zh-Hans&" + SRCHHPGUSR[bot_mode]}]
-    '''
     os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
     # Set the maximum number of retries
     max_retries = 5
