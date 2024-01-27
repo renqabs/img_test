@@ -91,7 +91,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                                 {"name": "_U", "value": [d['value'] for d in cookies if d['name'] == '_U'][0]}]
                             os.environ['cookies_captcha_solved'] = json.dumps(cookies_new)
             elif ("Request is throttled" in str(e)) and i < max_retries:
-                os.environ['cookies_captcha_solved'] = json.dumps(cookies_new)
+                os.environ['cookies_captcha_solved'] = ""
             else:
                 if i == max_retries:
                     print("Failed after", max_retries, "attempts.")
