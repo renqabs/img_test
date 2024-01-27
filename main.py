@@ -65,7 +65,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
             ) and i < max_retries:
                 print("Retrying...", i + 1, "attempts.")
                 await asyncio.sleep(2)
-            elif "User needs to solve CAPTCHA" in str(e):
+            elif ("User needs to solve CAPTCHA" in str(e)) and i < max_retries:
                 if VerifyServer:
                     async with httpx.AsyncClient(
                             proxies=args.proxy or None,
