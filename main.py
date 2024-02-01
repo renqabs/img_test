@@ -25,10 +25,15 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
     chatbot = None
     cookies = loaded_cookies
     image_gen_cookie = []
+    VerifyServer_ = ""
     if _U:
         image_gen_cookie += [{"name": "_U", "value": _U}]
     if KievRPSSecAuth:
         image_gen_cookie += [{"name": "KievRPSSecAuth", "value": KievRPSSecAuth}]
+    if os.environ.get('VerifyServer'):
+        VerifyServer_ = os.environ.get('VerifyServer')
+    if VerifyServer:
+        VerifyServer_ = VerifyServer
     cookies = [{"name": "_U", "value": str(uuid.uuid4()).replace('-','')}]
     SRCHHPGUSR = {
                 "creative": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3,nojbfedge",
@@ -67,7 +72,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                 await asyncio.sleep(2)
             elif ("User needs to solve CAPTCHA" in str(e)) and i < max_retries:
                 await asyncio.sleep(2)
-                if VerifyServer:
+                if VerifyServer_:
                     async with httpx.AsyncClient(
                             proxies=args.proxy or None,
                             timeout=30,
@@ -77,7 +82,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                         #print("solve CAPTCHA ...")
                         await asyncio.sleep(random.randint(0,5))
                         response_cap = await client.post(
-                            url=VerifyServer,
+                            url=VerifyServer_,
                             json={"cookies:": ""},
                             follow_redirects=True,
                         )
