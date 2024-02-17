@@ -87,7 +87,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                             follow_redirects=True,
                         )
                         if response_cap.status_code != 200:
-                            yield {"type": "error", "error": "solve CAPTCHA Failed"}
+                            print("solve CAPTCHA Failed")
                             #print(f"Status code: {response_cap.status_code}")
                             #print(response_cap.url)
                         else:
