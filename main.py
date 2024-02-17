@@ -44,7 +44,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
     image_gen_cookie += [{"name": "SRCHHPGUSR", "value": "SRCHLANG=zh-Hans&" + SRCHHPGUSR[bot_mode]}]
     os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
     # Set the maximum number of retries
-    max_retries = 5
+    max_retries = 15
     for i in range(max_retries + 1):
         #print(cookies)
         if os.environ.get('cookies_captcha_solved'):
@@ -71,7 +71,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                 print("Retrying...", i + 1, "attempts.")
                 await asyncio.sleep(2)
             elif ("User needs to solve CAPTCHA" in str(e)) and i < max_retries:
-                await asyncio.sleep(2)
+                #await asyncio.sleep(2)
                 if VerifyServer_:
                     async with httpx.AsyncClient(
                             proxies=args.proxy or None,
@@ -80,7 +80,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                                      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0"},
                     ) as client:
                         #print("solve CAPTCHA ...")
-                        await asyncio.sleep(random.randint(0,5))
+                        #await asyncio.sleep(random.randint(0,5))
                         response_cap = await client.post(
                             url=VerifyServer_,
                             json={"cookies:": ""},
