@@ -44,7 +44,7 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
     image_gen_cookie += [{"name": "SRCHHPGUSR", "value": "SRCHLANG=zh-Hans&" + SRCHHPGUSR[bot_mode]}]
     os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
     # Set the maximum number of retries
-    max_retries = 15
+    max_retries = 5
     for i in range(max_retries + 1):
         #print(cookies)
         if os.environ.get('cookies_captcha_solved'):
