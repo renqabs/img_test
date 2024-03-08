@@ -295,7 +295,7 @@
             }]
         }
         let formatted = messages.map(message => {
-            let allowedTags = ['[assistant](#message)', '[user](#message)', '[system](#additional_instructions)'];
+            let allowedTags = ['[assistant](#message)', '[user](#message)', '[system](#additional_instructions)', '[assistant](#inner_monologue)'];
             let result = "";
             if (allowedTags.includes(message.tag)) {
                 result = `${message.tag}\n${message.hiddenText ?? message.text}`;
