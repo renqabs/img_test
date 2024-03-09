@@ -34,18 +34,18 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
         VerifyServer_ = os.environ.get('VerifyServer')
     if VerifyServer:
         VerifyServer_ = VerifyServer
-    cookies = [{"name": "_U", "value": str(uuid.uuid4()).replace('-','')}]
-    SRCHHPGUSR = {
-                "creative": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3,nojbfedge",
-                "precise": "cdxtone=Precise&cdxtoneopts=h3precise,clgalileo,gencontentv3,nojbfedge",
-                "balanced": "cdxtone=Balanced&cdxtoneopts=galileo,fluxhint,glfluxv13,nojbfedge"
-                 }
-    cookies += [{"name": "SRCHHPGUSR", "value": SRCHHPGUSR[bot_mode]}]
-    image_gen_cookie += [{"name": "SRCHHPGUSR", "value": "SRCHLANG=zh-Hans&" + SRCHHPGUSR[bot_mode]}]
-    os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
     # Set the maximum number of retries
-    max_retries = 5
+    max_retries = 10
     for i in range(max_retries + 1):
+        cookies = [{"name": "_U", "value": str(uuid.uuid4()).replace('-','')}]
+        SRCHHPGUSR = {
+                    "creative": "cdxtone=Creative&cdxtoneopts=h3imaginative,gencontentv3,nojbfedge",
+                    "precise": "cdxtone=Precise&cdxtoneopts=h3precise,clgalileo,gencontentv3,nojbfedge",
+                    "balanced": "cdxtone=Balanced&cdxtoneopts=galileo,fluxhint,glfluxv13,nojbfedge"
+                     }
+        cookies += [{"name": "SRCHHPGUSR", "value": SRCHHPGUSR[bot_mode]}]
+        image_gen_cookie += [{"name": "SRCHHPGUSR", "value": "SRCHLANG=zh-Hans&" + SRCHHPGUSR[bot_mode]}]
+        os.environ['image_gen_cookie'] = json.dumps(image_gen_cookie)
         #print(cookies)
         if os.environ.get('cookies_captcha_solved'):
             cookies_bot = json.loads(os.environ.get('cookies_captcha_solved'))
@@ -69,8 +69,8 @@ async def sydney_process_message(user_message, bot_mode, context, _U, KievRPSSec
                 or "Unhandled Exception" in str(e)
                 or "httpx.ConnectTimeout" in str(e)
             ) and i < max_retries:
-                print("Retrying...", i + 1, "attempts.")
-                await asyncio.sleep(2)
+                #print("Retrying...", i + 1, "attempts.")
+                await asyncio.sleep(0.1)
             elif ("User needs to solve CAPTCHA" in str(e)) and i < max_retries:
                 #await asyncio.sleep(2)
                 if VerifyServer_:
