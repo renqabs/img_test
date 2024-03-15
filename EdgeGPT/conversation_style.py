@@ -25,18 +25,15 @@ class ConversationStyle(Enum):
         "nojbfedge"
     ]
     balanced = [
-        "nlu_direct_response_filter",
         "deepleo",
         "disable_emoji_spoken_text",
-        "responsible_ai_policy_235",
         "enablemm",
         "dv3sugg",
         "autosave",
         "iyxapbing",
         "iycapbing",
         "clgalileo",
-        "eredirecturl",
-        "saharagenconv5",
+        "gencontentv3",
         "nojbfedge"
     ]
     precise = [
