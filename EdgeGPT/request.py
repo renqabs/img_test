@@ -140,6 +140,9 @@ class ChatHubRequest:
                     "description": webpage_context,
                     "contextType": "WebPage",
                     "messageType": "Context",
+                    "sourceName": "",
+                    "sourceUrl": "",
+                    "locale": "",
                     # "messageId": "discover-web--page-ping-mriduna-----",
                 },
             ]
