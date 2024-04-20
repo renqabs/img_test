@@ -183,7 +183,7 @@ async def api_handler(request):
             body = adaptiveCards[0].get("body") if adaptiveCards else None
             lastText = body[0].get("text") if (body and body[0].get("type") == 'TextBlock') else None
         if stream:
-            if lastText:
+            if lastText and len(lastText) != lastLength:
                 await response.write(f'data:{json.dumps(response_open_ai_message(stream,lastText[lastLength:]))}\n\n'.encode())
                 lastLength = len(lastText)
     if stream:
