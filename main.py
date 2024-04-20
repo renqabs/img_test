@@ -14,9 +14,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 public_dir = '/public'
 
 from EdgeGPT.EdgeGPT import Chatbot
-from EdgeGPT.constants import HEADERS_INIT_CONVER
-from aiohttp import web
 
+from aiohttp import web
+from aiohttp.web import middleware
 def generate_hex_string(length):
     hex_digits = '0123456789ABCDEF'
     return ''.join(random.choice(hex_digits) for _ in range(length))
@@ -118,6 +118,98 @@ async def claude_process_message(context):
         yield {"type": "error", "error": traceback.format_exc()}
 
 
+def response_open_ai_message(stream: bool = True, content: str = ''):
+    message = {
+        'role': 'assistant',
+        'content': content,
+    }
+    return {
+        'choices': [{
+            'delta': message if stream else {},
+            'message': message if not stream else {},
+        }],
+    }
+
+
+def parse_open_ai_message(data):
+    messages = data['messages'][:]
+    prompt = messages.pop()['content'] if messages else None
+    context = message_to_context(messages)
+    model = data['model'][:-8] if data['model'][-7:] == "offline" else data['model']
+    allow_search = False if data['model'][-7:] == "offline" else True
+    return prompt, data.get('stream', False), model if model in ['Creative', 'Balanced', 'Precise'] else "Creative", allow_search, context
+
+
+def message_to_context(messages, limit=32000):
+    messages_clone = messages[:]
+    cache = []
+    cur_len = 0
+    while True:
+        message = messages_clone.pop() if messages_clone else None
+        if not message:
+            break
+        current = f"[{message['role']}](#message)\n{message['content'].strip()}\n"
+        if cur_len + len(current) >= limit:
+            break
+        cache.insert(0, current)
+        cur_len += len(current) + 1
+    return ''.join(cache).replace('[system](#message)', '[system](#additional_instructions)')
+
+
+async def api_handler(request):
+    if request.method == 'OPTIONS':
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST',
+            'Access-Control-Allow-Headers': '*'
+        }
+        return web.Response(
+            status=200,
+            body='{"message": "pong"}',
+            headers=headers,
+            content_type='application/json'
+        )
+    data = await request.json()
+    prompt, stream, model, allow_search, context = parse_open_ai_message(data)
+    if stream:
+        response = web.StreamResponse(status=200, reason='OK', headers={'Content-Type': 'text/event-stream; charset=utf-8','Access-Control-Allow-Origin': '*',})
+        await response.prepare(request)
+    lastLength = 0
+    lastText = ''
+    async for data in sydney_process_message(user_message=prompt, bot_mode=model.lower(), context=context, _U=None, KievRPSSecAuth=None, MUID=None, VerifyServer=None, locale='zh-CN', enable_gpt4turbo=False, imageInput=None, enableSearch=allow_search):
+        if data.get("target") == 'update':
+            messages = data.get("arguments")[0].get("messages")
+            adaptiveCards = messages[0].get("adaptiveCards") if messages else None
+            body = adaptiveCards[0].get("body") if adaptiveCards else None
+            lastText = body[0].get("text") if (body and body[0].get("type") == 'TextBlock') else None
+        if stream:
+            if lastText:
+                await response.write(f'data:{json.dumps(response_open_ai_message(stream,lastText[lastLength:]))}\n\n'.encode())
+                lastLength = len(lastText)
+    if stream:
+        return await response.write_eof(b'data: [DONE]')
+    else:
+        return web.json_response(response_open_ai_message(stream,lastText))
+
+
+async def api_models_handler(request):
+    return web.json_response({'data': [{'id': 'Creative'}, {'id': 'Balanced'}, {'id': 'Precise'},{'id': 'Creative-offline'}, {'id': 'Balanced-offline'}, {'id': 'Precise-offline'}]})
+
+
+@middleware
+async def authorize(request, handler):
+    if (request.method == 'POST') and (request.path in ['/api/v1/chat/completions','/api/v1/models']):
+        apikey = os.getenv('apikey')
+        if apikey:
+            auth_header = request.headers.get('Authorization')
+            if not auth_header or not auth_header.startswith('Bearer '):
+                raise web.HTTPUnauthorized(body="缺少授权信息", headers={'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'})
+            token = auth_header[7:]  # Skip 'Bearer '
+            if token != apikey:
+                raise web.HTTPUnauthorized(body="授权失败", headers={'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'})
+    return await handler(request)
+
+
 async def http_handler(request):
     file_path = request.path
     if file_path == "/":
@@ -180,8 +272,11 @@ async def websocket_handler(request):
 
 
 async def main(host, port):
-    app = web.Application()
+    app = web.Application(middlewares=[authorize])
     app.router.add_get('/ws/', websocket_handler)
+    app.router.add_options('/api/v1/chat/completions', api_handler)
+    app.router.add_post('/api/v1/chat/completions', api_handler)
+    app.router.add_get('/api/v1/models', api_models_handler)
     app.router.add_get('/{tail:.*}', http_handler)
 
     runner = web.AppRunner(app)
