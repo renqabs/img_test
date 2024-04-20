@@ -27,8 +27,8 @@ class ConversationStyle(Enum):
         "autosave",
         "iyxapbing",
         "iycapbing",
-        "clgalileo",
-        "gencontentv3",
+        "galileo",
+        "saharagenconv5",
         "nojbfedge"
     ]
     precise = [
