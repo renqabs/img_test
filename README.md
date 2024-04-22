@@ -31,3 +31,4 @@ Then, you can open `http://localhost:65432` in your browser to start chatting.
 ## OpenAI API
 - `apikey`: optional environment variable
 - `OPENAI_API_BASE`: `http://localhost:65432/api`
+- `model`: Creative,Balanced,Precise,Creative-offline,Balanced-offline,Precise-offline
